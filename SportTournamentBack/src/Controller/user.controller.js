@@ -154,7 +154,7 @@ function getUsers(req, res) {
 }
 
 //Edit User (admin and client)
-function editUser(req, res) {
+/*function editUser(req, res) {
   var dataToken = req.user;
   var params = req.body;
   var idUsuario = req.params.idUsuario;
@@ -231,6 +231,48 @@ function editUser(req, res) {
       }
     }
   });
+}*/
+
+function editUser(req, res) {
+  var dataToken = req.user;
+  var params = req.body;
+  var idUsuario = req.params.idUsuario;
+
+  var schemaUpdate = {};
+  params.name ? (schemaUpdate.name = params.name) : null;
+  params.user ? (schemaUpdate.user = params.user) : null;
+  params.rol ? (schemaUpdate.rol = params.rol) : null;
+
+  /*
+        Verifica si es administrador y si es eso podrá editar cualquier usuario con el id enviado.
+        Ahora si es usuario verifica que sea su propia cuenta para poder editar, de lo contrario mandara que no tiene permisos
+    */
+  if (
+    dataToken.rol == "ADMIN" ||
+    (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)
+  ) {
+    User.findByIdAndUpdate(
+      idUsuario,
+      schemaUpdate,
+      { new: true },
+      (err, userEdited) => {
+        if (err) {
+          res.status(500).send({ message: err });
+        } else {
+          if (userEdited) {
+            res.status(200).send(userEdited);
+          } else {
+            res
+              .status(404)
+              .send({ message: "No se encontró el usuario para editar" });
+            console.log(idUsuario);
+          }
+        }
+      }
+    );
+  } else {
+    res.status(403).send({ message: "No tienes acceso" });
+  }
 }
 
 //Delete User (admin)

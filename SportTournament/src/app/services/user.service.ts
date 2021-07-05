@@ -52,7 +52,7 @@ export class UserService {
   editUser(user: User,id): Observable<any> {
     let params = JSON.stringify(user);
     let headersToken = this.headersVariable.set('Authorization', this.getToken())
-    return this._http.put(this.rute + 'user/edit/'+ id,params, { headers: headersToken })
+    return this._http.put(this.rute + '/user/edit/'+ id,params, { headers: headersToken })
   }
 
   ascendClient(id): Observable<any> {

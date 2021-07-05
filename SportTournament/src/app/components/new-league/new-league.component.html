@@ -8,8 +8,13 @@
     <h1 class="h3 mb-3 fw-normal">Nueva Liga</h1>
 
     <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="name" #name="ngModel"[(ngModel)]="leagueModel.name" >
+      <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="name" #name="ngModel"[(ngModel)]="leagueModel.name" >
       <label for="floatingInput">Nombre de la liga</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="image" #image="ngModel"[(ngModel)]="leagueModel.image" >
+      <label for="floatingInput">Imagen URL</label>
     </div>
     <br>
 

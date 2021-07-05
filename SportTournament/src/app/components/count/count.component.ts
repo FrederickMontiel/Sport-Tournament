@@ -45,6 +45,7 @@ export class CountComponent implements OnInit {
           showConfirmButton: false,
           timer: 1500
         })
+        console.log(this.userIdModel._id)
 
       }
     )

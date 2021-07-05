@@ -19,7 +19,7 @@ export class NewLeagueComponent implements OnInit {
     private _userService: UserService,
     private _router: Router
   ) {
-    this.leagueModel = new League("","");
+    this.leagueModel = new League("","","","");
     this.token = this._userService.getToken();
 
    }
