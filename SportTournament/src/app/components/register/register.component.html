@@ -1,0 +1,38 @@
+<div class="page">
+  <div class="container">
+    <div class="left">
+      <div class="login text-center">Registrarse</div>
+      <div class="eula text-center">Bienvenido ingrese sesion</div>
+    </div>
+    <div class="right">
+      <div class="form">
+        <form>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Nombre</span>
+            <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1" id="inputName" name="name" #name="ngModel"[(ngModel)]="userModel.name">
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" placeholder="example@gmail.com" aria-label="Recipient's username" aria-describedby="basic-addon2"
+            id="inputEmail" name="email" #email="ngModel"[(ngModel)]="userModel.email">
+            <span class="input-group-text" id="basic-addon2">Email</span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Username</span>
+            <input type="text" class="form-control" placeholder="Username" aria-label="Name" aria-describedby="basic-addon1"
+            id="inputUser" name="user" #user="ngModel"[(ngModel)]="userModel.user">
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="example" aria-label="Recipient's username" aria-describedby="basic-addon2"
+            id="inputPassword" name="password" #password="ngModel"[(ngModel)]="userModel.password">
+            <span class="input-group-text" id="basic-addon2">Password</span>
+          </div>
+          <div class="d-grid gap-2 col-8 mx-auto">
+            <button class="btn btn-warning" type="button" (click)="register()">Crear cuenta</button>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,211 @@
+const ScoreModel = require("../Models/score.model");
+const TeamsModel = require("../Models/teams.model");
+const LeagueModel = require("../Models/league.model");
+const UserModel = require("../Models/user.model");
+
+function getScore(req, res){
+    var idUsuario = req.params.idUsuario;
+    var idScore =  req.params.idScore;
+    var dataToken = req.user;
+
+    if(dataToken.rol == "ADMIN" || (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)){
+        ScoreModel.find({score: idScore}).populate("teams").exec((err, score) => {
+            if(err){
+                res.status(500).send({message: "Error en el servidor al ver un score"});
+            }else{
+                if(score){
+
+                        res.status(200).send({message: "Se integró con exito", score});
+
+                }else{
+                    res.status(404).send({message: "Datos nulos como respuesta del servidor"});
+                }
+            }
+        });
+    }else{
+        res.status(500).send({message:"No puedes ver los scores"});
+    }
+}
+
+
+function addScore(req, res){
+    var params = req.body;
+    var idUsuario = req.params.idUsuario;
+    var idLiga = req.params.idLiga;
+    var dataToken = req.user;
+
+    if(dataToken.rol == "ADMIN" || (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)){
+        verifyNumberJurneys(params.journey, idLiga, err => {
+            if(err){
+                res.status(500).send({message: err});
+            }else{
+                verifyBothTeamsExists(params.teamOne, params.teamTwo, err => {
+                    if(err){
+                        res.status(500).send({message: err});
+                    }else{
+                        verifyConfrontationIsExist(params.teamOne, params.teamTwo, idLiga, exist => {
+                            if(exist){
+                                res.status(500).send({message: err});
+                            }else{
+                                var modelo = new ScoreModel({
+                                    journey: params.journey,
+                                    league: idLiga,
+                                    teamOne: params.teamOne,
+                                    pointsOne: params.pointsOne,
+                                    teamTwo: params.teamTwo,
+                                    pointsTwo: params.pointsTwo
+                                });
+
+                                modelo.save((err, saved) => {
+                                    if(err){
+                                        res.status(500).send({message: "Error al agregar score"});
+                                    }else{
+                                        res.status(500).send({message: saved});
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        
+    }else{
+        res.status(500).send({message:"No puedes agregar los equipos"});
+    }
+}
+
+function editScore(req, res){
+    var params = req.body;
+    var idUsuario = req.params.idUsuario;
+    var idScore =  req.params.idScore;
+    var dataToken = req.user;
+    
+    var schema = {};
+    params.name?schema.name=params.name:null;
+    params.teamOne?schema.teamOne=params.teamOne:null;
+    params.pointsOne?schema.pointsOne=params.pointsOne:null;
+    params.teamTwo?schema.teamTwo=params.teamTwo:null;
+    params.pointsTwo?schema.pointsTwo=params.pointsTwo:null;
+    
+    dataToken.rol == "ADMIN"?schema.score = idScore:null;
+
+    if(dataToken.rol == "ADMIN" || (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)){
+        TeamsModel.findByIdAndUpdate(idTeam, schema, {new: true}, (err, edited) =>{
+            if(err){
+                res.status(500).send({message: "Error en el servidor al editar un score"});
+            }else{
+                if(edited){
+                    res.status(200).send({message: "Se editó con exito", edited});
+                }else{
+                    res.status(404).send({message: "Datos nulos como respuesta del servidor"});
+                }
+            }
+        })
+    }else{
+        res.status(403).send({message: "No puedes editar este score"});
+    }
+}
+
+function deleteScore(req, res){
+    var idUsuario = req.params.idUsuario;
+    var idScore =  req.params.idScore;
+    var dataToken = req.user;
+    
+    dataToken.rol == "ADMIN"?schema.score = idScore:null;
+
+    if(dataToken.rol == "ADMIN" || (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)){
+        TeamsModel.findByIdAndDelete(idTeam,(err, delited) =>{
+            if(err){
+                res.status(500).send({message: "Error en el servidor al eliminar un score"});
+            }else{
+                if(edited){
+                    res.status(200).send({message: "Se elimino con exito", delited});
+                }else{
+                    res.status(404).send({message: "Datos nulos como respuesta del servidor"});
+                }
+            }
+        })
+    }else{
+        res.status(403).send({message: "No puedes eliminar este score"});
+    }
+}
+
+/* -------------------------- Funciones Reutilizables ------------------------ */
+function verifyNumberJurneys(numero, liga, callback){
+    TeamsModel.find({league : liga}, (err, equipos) => {
+        if(err){
+            callback("Error en la consulta al verificar cantidad de jornadas");
+            //res.status(500).send({message: "Error en el servidor al verificar un espacio en la jornada [Ligas]"});
+        }else{
+            if(numero < equipos.length){
+                callback(false);
+            }else{
+                callback("La jornada que quieres agregar es mas alta de la que se admite.");
+            }
+        }
+    });
+}
+
+function verifyBothTeamsExists(teamOne, teamTwo, callback){
+    TeamsModel.findById(teamOne, (err, equipoOne) => {
+        if(err){
+            callback("Error en la consulta al verificar la existencia del equipo 1");
+        }else{
+            if(equipoOne){
+                TeamsModel.findById(teamTwo, (err, equipoTwo) => {
+                    if(err){
+                        callback("Error en la consulta al verificar la existencia del equipo 2");
+                    }else{
+                        if(equipoTwo){
+
+                            var uno = String(equipoOne.league);
+                            var dos = String(equipoTwo.league);
+
+                            if(uno == dos){
+                                callback(false);
+                            }else{
+                                callback("Los equipos no pertenecen a la misma liga");
+                            }
+                        }else{
+                            callback("No existe el equipo 2");
+                        }
+                    }
+                });
+            }else{
+                callback("No existe el equipo 1");
+            }
+        }
+    });
+}
+
+function verifyConfrontationIsExist(teamOne, teamTwo, idLiga, callback){
+    ScoreModel.find({teamOne : teamOne, teamTwo : teamTwo, league : idLiga}, (err, score) => {
+        if(err){
+            callback("Error al verificar la existencia de un enfrentamiento 1");
+        }else{
+            if(score && score.length > 0){
+                callback("Ya existe un enfrentamiento en estas jornadas.");
+            }else{
+                ScoreModel.find({teamOne : teamTwo, teamTwo : teamOne, league : idLiga}, (err, score) => {
+                    if(err){
+                        callback("Error al verificar la existencia de un enfrentamiento 2");
+                    }else{
+                        if(score && score.length > 0){
+                            callback("Ya existe un enfrentamiento en estas jornadas.");
+                        }else{
+                            callback(false);
+                        }
+                    }
+                });
+            }
+        }
+    });
+}
+
+module.exports = {
+    getScore,
+    addScore,
+    editScore,
+    deleteScore
+}
