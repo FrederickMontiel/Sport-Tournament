@@ -127,26 +127,25 @@ function getTeam(req, res) {
         });
       } else {
         if (team) {
-          team.forEach((dato) => {
-            getMoreData(dato._id, (err, marcador) => {
+            var responseData = [];
+
+            console.log(team);
+
+            getMoreData(team._id, (err, marcador) => {
               if (err) {
-                //"Error en el servidor: No se pudo obtener la cantidad de puntos"
                 res.status(500).send({ message: err });
               } else {
                 responseData.push({
-                  _id: dato._id,
-                  name: dato.name,
-                  image: dato.image,
+                  _id: team._id,
+                  name: team.name,
+                  image: team.image,
+                  userCreator: team.userCreator,
                   marcador,
                 });
-              }
-
-              if (team[team.length - 1]._id == dato._id) {
                 res.status(200).send(responseData);
               }
             });
             //res.status(200).send({ equipos: team });
-          });
         } else {
           res
             .status(404)
