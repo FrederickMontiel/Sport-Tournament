@@ -203,6 +203,35 @@ function verifyConfrontationIsExist(teamOne, teamTwo, idLiga, callback){
     });
 }
 
+function getPDF(req, res){
+
+    var params = req.body; 
+
+    leagueModel.findOne({name: params.name}).exec((err,leagueData) =>{
+        var contentPDF = 
+        "<!DOCTYPE html><html><head><style>*{font-family: arial;} table{width: 100%; border-collapse: collapse;} td{width: 25%;} .scoreData{background-color: black; color: white; font-weight: bolder;}</style></head><body><h3>" +
+        leagueData.name +
+        "</h3><table><tr><td class='scoreData'>journey</td><td class='scoreData'>teamOne</td><td class='scoreData'>pointsOne</td><td class='scoreData'>teamTwo</td><td class='scoreData'>pointsTwo</td>";
+        
+        contenidoPdf += "<tr>";
+        contenidoPdf += "<td>" + scoreModel.journey + "</td><td>" + scoreModel.teamOne + "</td><td>" + scoreModel.pointsOne + "</td><td>" + scoreModel.teamTwo + "</td><td>" + scoreModel.pointsTwo;
+        contenidoPdf += "</tr>";
+    
+    });
+
+        contentPDF += "</table></body></html>";
+
+        htmlPdf.create(contentPDF).toFile("./pdf/listaJornadas." + leagueData.name + ".pdf", (err, response)=>{
+            if(err){
+                console.log(err);
+            }else{
+                res.status(200).send({
+                    response
+                });
+            }
+        });
+    }
+
 module.exports = {
     getScore,
     addScore,

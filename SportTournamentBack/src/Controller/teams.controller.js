@@ -2,6 +2,7 @@
 const teamsModel = require("../Models/teams.model");
 const scoreModel = require("../Models/score.model");
 const TeamsModel = require("../Models/teams.model");
+const { model } = require("mongoose");
 
 //list teams
 function getTeams(req, res) {
@@ -183,35 +184,21 @@ function addTeam(req, res) {
               image: params.image,
               league: idLiga,
             });
-            teamsModel.countDocuments({}, (err, conteo) => {
-              console.log(conteo);
-              if (conteo >= 10) {
+            modelo.save((err, equipo) => {
+              if(err){
                 res.status(500).send({
-                  message:
-                    "Error al agregar equipo, Limite de equipos superado en una liga",
+                  message: "Error al agregar equipo",
                 });
-              } else {
-                modelo.save((err, team) => {
-                  if (err) {
-                    res.status(500).send({
-                      message:
-                        "Error en el servidor al integrar un equipo a una liga",
-                    });
-                  } else {
-                    if (team) {
-                      conteo = conteo + 1;
-                      res.status(200).send({
-                        message: "Se integró con exito",
-                        team,
-                        Equipos: conteo,
-                      });
-                    } else {
-                      res.status(404).send({
-                        message: "Datos nulos como respuesta del servidor",
-                      });
-                    }
-                  }
-                });
+              }else{
+                if(equipo){
+                  res.status(200).send({
+                    equipo
+                  });
+                }else{
+                  res.status(500).send({
+                    message: "Datos no encontrados",
+                  });
+                }
               }
             });
           } else {
