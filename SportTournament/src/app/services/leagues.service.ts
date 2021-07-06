@@ -29,6 +29,13 @@ export class LeaguesService {
     return this._http.post(this.rute+'user/'+id+'/league',params,{headers: headersToken})
    }
 
+   getLeague(id): Observable<any> {
+    return this._http.get(this.rute + 'user/league/'+id,{headers: this.headersVariable})
+   }
+
+   getUser(id: String): Observable<any> {
+    return this._http.get(this.rute + 'user/getId/' + id, { headers: this.headersVariable })
+  }
 
 
 }

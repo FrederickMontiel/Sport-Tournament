@@ -24,7 +24,7 @@
                 <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                   <button type="button" class="btn btn-danger">Eliminar</button>
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver</button>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getLeague(liga._id)">Ver</button>
                 </div>
               </li>
             </ul>
@@ -74,16 +74,53 @@
           </tbody>
         </table>
 
-
-
       </div>
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-dismiss="modal">Agregar equipo</button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
 
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">Agregar equipo a {{leagueId.name}}</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+
+    <div class="container d-flex align-items-center flex-column" style="width: 250px;">
+      <img class="masthead-avatar mb-5" src="{{leagueId.image}}" alt="..." width='70%'/>
+
+      <h2 class=" text-center text-uppercase text-secondary mb-0"></h2>
+        <div class="divider-custom">
+          <div class="divider-custom-line"></div>
+          <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+          <div class="divider-custom-line"></div>
+      </div>
+
+      <p class="masthead-subheading font-weight-light mb-0 fs-3"></p>
+      <br>
+
+      <form class="text-center" >
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Nombre del equipo</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="name" #name="ngModel"[(ngModel)]='teamModel.name'>
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Imagen(Url)</label>
+          <input type="text" class="form-control" id="exampleInputPassword1" name="image" #image="ngModel"[(ngModel)]='teamModel.image'>
+        </div>
+        <button type="submit" class="btn btn-primary" (click)="addTeam(leagueId._id)" >Guardar equipo</button>
+      </form>
+
+    </div>
+  </div>
+</div>
 
 <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 

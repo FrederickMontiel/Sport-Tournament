@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { League } from 'src/app/models/league.model';
+import { Team } from 'src/app/models/team.model';
 import { LeaguesService } from 'src/app/services/leagues.service';
+import { TeamsService } from 'src/app/services/teams.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
@@ -8,17 +10,22 @@ import Swal from 'sweetalert2';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  providers: [LeaguesService, UserService]
+  providers: [LeaguesService, UserService,TeamsService]
 })
 export class HomeComponent implements OnInit {
   public leagueModel: League;
+  public leagueId: League;
   public token: String;
   public modelGetLeague: League;
+  public teamModel: Team
   constructor(
     public _leagueService: LeaguesService,
     public _userService: UserService,
+    public _teamService: TeamsService
   ){
     this.token = _userService.getToken();
+    this.leagueId = new League("","","","")
+    this.teamModel = new Team("","","","");
    }
 
   ngOnInit(): void {
@@ -34,4 +41,35 @@ export class HomeComponent implements OnInit {
     )
   }
 
+  getLeague(id){
+    this._leagueService.getLeague(id).subscribe(
+      response=>{
+        console.log(response.league)
+        this.leagueId = response.league;
+      }
+    )
+  }
+
+  addTeam(idLeague){
+    this._teamService.addTeam(this.token,this.teamModel,this._userService.getIdentity()._id,idLeague).subscribe(
+      response=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'El equipo se creo correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      },
+      error=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: error.error.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    )
+  }
 }

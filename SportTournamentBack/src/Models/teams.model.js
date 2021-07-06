@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 var teamsSchema = Schema({
   image: String,
   name: String,
-  league: { type: Schema.Types.ObjectId, ref: "leagues" }
+  league: { type: Schema.Types.ObjectId, ref: "leagues" },
 });
 
 //Exports
