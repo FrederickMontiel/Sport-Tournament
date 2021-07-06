@@ -179,24 +179,38 @@ function addTeam(req, res) {
           });
         } else {
           if (!teamFound) {
-            var modelo = new TeamsModel({
-              name: params.name,
-              image: params.image,
-              league: idLiga,
-            });
-            modelo.save((err, equipo) => {
+            teamsModel.find({league: idLiga}, (err, equipos) => {
               if(err){
                 res.status(500).send({
-                  message: "Error al agregar equipo",
+                  message: "Error al buscar equipos de una liga",
                 });
               }else{
-                if(equipo){
-                  res.status(200).send({
-                    equipo
+                if(equipos.length < 10){
+                  var modelo = new TeamsModel({
+                    name: params.name,
+                    image: params.image,
+                    league: idLiga,
+                  });
+                  modelo.save((err, equipo) => {
+                    if(err){
+                      res.status(500).send({
+                        message: "Error al agregar equipo",
+                      });
+                    }else{
+                      if(equipo){
+                        res.status(200).send({
+                          equipo
+                        });
+                      }else{
+                        res.status(500).send({
+                          message: "Datos no encontrados",
+                        });
+                      }
+                    }
                   });
                 }else{
-                  res.status(500).send({
-                    message: "Datos no encontrados",
+                  res.status(403).send({
+                    message: "Maximo de equipos en esta liga alcanzado",
                   });
                 }
               }
