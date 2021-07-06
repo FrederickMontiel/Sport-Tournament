@@ -114,13 +114,14 @@ function getMoreData(id, callback) {
 function getTeam(req, res) {
   var idUsuario = req.params.idUsuario;
   var idLiga = req.params.idLiga;
+  var idTeam = req.params.idTeam;
   var dataToken = req.user;
 
   if (
     dataToken.rol == "ADMIN" ||
     (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)
   ) {
-    TeamsModel.findOne({ league: idLiga }, (err, team) => {
+    TeamsModel.findOne({ _id : idTeam, league: idLiga }, (err, team) => {
       if (err) {
         res.status(500).send({
           message: "Error en el servidor al integrar un equipo a una liga",
@@ -128,8 +129,6 @@ function getTeam(req, res) {
       } else {
         if (team) {
             var responseData = [];
-
-            console.log(team);
 
             getMoreData(team._id, (err, marcador) => {
               if (err) {
