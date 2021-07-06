@@ -17,7 +17,8 @@ export class HomeComponent implements OnInit {
   public leagueId: League;
   public token: String;
   public modelGetLeague: League;
-  public teamModel: Team
+  public teamModel: Team;
+  public teamTable: {};
   constructor(
     public _leagueService: LeaguesService,
     public _userService: UserService,
@@ -46,6 +47,7 @@ export class HomeComponent implements OnInit {
       response=>{
         console.log(response.league)
         this.leagueId = response.league;
+        this.getTeams(id)
       }
     )
   }
@@ -69,6 +71,19 @@ export class HomeComponent implements OnInit {
           showConfirmButton: false,
           timer: 1500
         })
+      }
+    )
+  }
+
+  getTeams(idLeague){
+    this._teamService.getTeams(this.token,this._userService.getIdentity()._id,idLeague).subscribe(
+      response=>{
+        console.log(response.teams)
+        this.teamTable = response.teams;
+      },
+      error=>{
+        console.log(error.error.message)
+         console.log(idLeague)
       }
     )
   }

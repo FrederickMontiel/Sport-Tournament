@@ -44,40 +44,30 @@
       </div>
       <div class="modal-body">
 
-        <table class="table table-dark table-hover">
+        <table class="table table-dark table-hover" >
           <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
+            <tr >
+              <th scope="col">id</th>
+              <th scope="col">name</th>
+              <th scope="col">PJ</th>
+              <th scope="col">G</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
+            <tr *ngFor="let teams of teamTable ">
+              <th>{{teams._id}}</th>
+              <td>{{teams.name}}</td>
+              <td>{{teams.marcador.pj}}</td>
+              <td>{{teams.marcador.g}}</td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td colspan="2">Larry the Bird</td>
-              <td>@twitter</td>
-            </tr>
+
           </tbody>
         </table>
 
       </div>
 
       <div class="modal-footer">
-        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-dismiss="modal">Agregar equipo</button>
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-dismiss="modal" >Agregar equipo</button>
         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>

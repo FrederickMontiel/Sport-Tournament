@@ -21,4 +21,9 @@ export class TeamsService {
     let headersToken = this.headersVariable.set('Authorization', token)
     return this._http.post(this.rute+'/user/'+idUser+'/league/'+idLeague+'/team',params,{headers: headersToken})
    }
+
+   getTeams(token,idUser,idLeague): Observable<any> {
+    let headersToken = this.headersVariable.set('Authorization', token)
+    return this._http.get(this.rute+'user/'+idUser+'/league/'+idLeague+'/teams',{headers: headersToken})
+   }
 }
