@@ -106,7 +106,21 @@ function getTeam(req, res) {
                 });
             } else {
                 if (team) {
-                    res.status(200).send({ message: "Se encontro con exito", team });
+                    team.forEach((dato) => {
+                        getMoreData(dato._id, (err, marcador) => {
+                            if(err){
+                                //"Error en el servidor: No se pudo obtener la cantidad de puntos"
+                                res.status(500).send({ message: err });
+                            }else{
+                                responseData.push({_id: dato._id, name: dato.name, image: dato.image, marcador});
+                            }
+
+                            if(team[team.length-1]._id == dato._id){
+                                res.status(200).send(responseData);
+                            }
+                        });
+                        //res.status(200).send({ equipos: team });
+                    });
                 } else {
                     res.status(404).send({ message: "Datos nulos como respuesta del servidor" });
                 }
