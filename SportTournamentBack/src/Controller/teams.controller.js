@@ -17,8 +17,21 @@ function getTeams(req, res) {
                 });
             } else {
                 if (team && team.length > 0) {
+                    var responseData = [];
+
                     team.forEach((dato) => {
-                        getPJ()
+                        getMoreData(dato._id, (err, marcador) => {
+                            if(err){
+                                //"Error en el servidor: No se pudo obtener la cantidad de puntos"
+                                res.status(500).send({ message: err });
+                            }else{
+                                responseData.push({_id: dato._id, name: dato.name, image: dato.image, marcador});
+                            }
+
+                            if(team[team.length-1]._id == dato._id){
+                                res.status(200).send(responseData);
+                            }
+                        });
                         //res.status(200).send({ equipos: team });
                     });
                 } else {
@@ -31,8 +44,52 @@ function getTeams(req, res) {
     }
 }
 
-function getPJ(id, callback){
-    scoreModel.find({$or  : {pointsUno}});
+function getMoreData(id, callback){
+    scoreModel.find({$or  : [{teamOne : id}, {teamTwo : id}]}, (err, data) => {
+        if(err){
+            callback("Error en la consulta al encontrar equipos en el score", false);
+        }else{
+            var pj = 0, g = 0, e = 0, p = 0, gf = 0, gc = 0, dg = 0, pts = 0;
+
+            pj = data.length;
+            
+            data.forEach(puntaje => {
+                if(id == String(puntaje.teamOne)){
+                    gf += puntaje.pointsOne;
+                    gc += puntaje.pointsOne;
+
+                    if(puntaje.pointsOne < puntaje.pointsTwo){
+                        p++;
+                    }else if(puntaje.pointsOne != puntaje.pointsTwo){
+                        g++;
+                        pts += 3;
+                    }else{
+                        pts += 1;
+                    }
+                }else if(id == String(puntaje.teamTwo)){
+                    gf += puntaje.pointsTwo;
+                    gc += puntaje.pointsOne;
+
+                    if(puntaje.pointsTwo < puntaje.pointsOne){
+                        p++;
+                    }else if(puntaje.pointsOne != puntaje.pointsTwo){
+                        g++;
+                        pts += 3;
+                    }else{
+                        pts += 1;
+                    }
+                }
+
+                if(puntaje.pointsOne == puntaje.pointsTwo){
+                    e++;
+                }
+
+                dg = gf-gc;
+            });
+
+            callback(false, {pj, g, e, p, gf, gc, dg, pts});
+        }
+    });
 }
 
 //data team
