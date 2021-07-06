@@ -27,7 +27,6 @@ function getScore(req, res){
     }
 }
 
-
 function addScore(req, res){
     var params = req.body;
     var idUsuario = req.params.idUsuario;
@@ -82,6 +81,7 @@ function editScore(req, res){
     var dataToken = req.user;
     
     var schema = {};
+    params.journey?schema.journey=params.journey:null;
     params.name?schema.name=params.name:null;
     params.teamOne?schema.teamOne=params.teamOne:null;
     params.pointsOne?schema.pointsOne=params.pointsOne:null;

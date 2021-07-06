@@ -12,6 +12,11 @@ api.get(
   md_authentication.ensureAuth,
   leagueController.getLeagues
 );
+api.get(
+  "/user/:idUsuario/league/:idLiga",
+  md_authentication.ensureAuth,
+  leagueController.getLeague
+);
 /*api.get(
   "/user/leagues",
   md_authentication.ensureAuth,
