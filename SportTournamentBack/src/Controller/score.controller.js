@@ -46,22 +46,26 @@ function addScore(req, res){
                             if(exist){
                                 res.status(500).send({message: err});
                             }else{
-                                var modelo = new ScoreModel({
-                                    journey: params.journey,
-                                    league: idLiga,
-                                    teamOne: params.teamOne,
-                                    pointsOne: params.pointsOne,
-                                    teamTwo: params.teamTwo,
-                                    pointsTwo: params.pointsTwo
-                                });
-
-                                modelo.save((err, saved) => {
-                                    if(err){
-                                        res.status(500).send({message: "Error al agregar score"});
-                                    }else{
-                                        res.status(500).send({message: saved});
-                                    }
-                                });
+                                if(params.teamOne != params.teamTwo){
+                                    var modelo = new ScoreModel({
+                                        journey: params.journey,
+                                        league: idLiga,
+                                        teamOne: params.teamOne,
+                                        pointsOne: params.pointsOne,
+                                        teamTwo: params.teamTwo,
+                                        pointsTwo: params.pointsTwo
+                                    });
+    
+                                    modelo.save((err, saved) => {
+                                        if(err){
+                                            res.status(500).send({message: "Error al agregar score"});
+                                        }else{
+                                            res.status(500).send({message: saved});
+                                        }
+                                    });
+                                }else{
+                                    res.status(403).send({message: "Los equipos no pueden ser los mismos"});
+                                }
                             }
                         });
                     }
@@ -91,17 +95,21 @@ function editScore(req, res){
     dataToken.rol == "ADMIN"?schema.score = idScore:null;
 
     if(dataToken.rol == "ADMIN" || (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)){
-        TeamsModel.findByIdAndUpdate(idTeam, schema, {new: true}, (err, edited) =>{
-            if(err){
-                res.status(500).send({message: "Error en el servidor al editar un score"});
-            }else{
-                if(edited){
-                    res.status(200).send({message: "Se editó con exito", edited});
+        if(params.teamOne != params.teamTwo){
+            TeamsModel.findByIdAndUpdate(idTeam, schema, {new: true}, (err, edited) =>{
+                if(err){
+                    res.status(500).send({message: "Error en el servidor al editar un score"});
                 }else{
-                    res.status(404).send({message: "Datos nulos como respuesta del servidor"});
+                    if(edited){
+                        res.status(200).send({message: "Se editó con exito", edited});
+                    }else{
+                        res.status(404).send({message: "Datos nulos como respuesta del servidor"});
+                    }
                 }
-            }
-        })
+            })
+        }else{
+            res.status(403).send({message: "Los equipos no pueden ser los mismos"});
+        }
     }else{
         res.status(403).send({message: "No puedes editar este score"});
     }
