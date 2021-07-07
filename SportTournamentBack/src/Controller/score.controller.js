@@ -147,7 +147,7 @@ function verifyNumberJurneys(numero, liga, callback){
             //res.status(500).send({message: "Error en el servidor al verificar un espacio en la jornada [Ligas]"});
         }else{
             if(numero < equipos.length){
-                callback(false);
+                callback("Liga no encontrada");
             }else{
                 callback("La jornada que quieres agregar es mas alta de la que se admite.");
             }
