@@ -163,6 +163,93 @@
             </div>
           </div>
         </div>
+        <br>
+
+        <div *ngIf="_userService.getIdentity().rol === 'ADMIN' ">
+          <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Torneos</h2>
+          <div class="divider-custom">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+        <div class="container">
+          <table class="table table-dark table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let league of leagueList'>
+                <th>{{league._id}}</th>
+                <td>{{league.name}}</td>
+                <td>{{league.userCreator.name}}</td>
+                <td>
+                  <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight2" aria-controls="offcanvasRight" (click)="getLeague(league._id)" >Ver</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+              <h5 id="offcanvasRightLabel">Usuario: {{userIdModel._id}}</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+
+              <div class="container d-flex align-items-center flex-column" style="width: 250px;">
+                <img class="masthead-avatar mb-5" src="assets/avataaars.svg" alt="..." />
+
+                <h2 class=" text-center text-uppercase text-secondary mb-0">{{userIdModel.name}}</h2>
+                  <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+                <p class="masthead-subheading font-weight-light mb-0 fs-3">{{userIdModel.email}}</p>
+                <br>
+                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-dismiss="offcanvas" aria-label="Close">Editar</button>
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModalDelete" >Eliminar</button>
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleAscend" (click)="getUserId(user._id)">Ascender</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight2" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+              <h5 id="offcanvasRightLabel"></h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+
+              <div class="container d-flex align-items-center flex-column" style="width: 250px;">
+                <img class="masthead-avatar mb-5" src="{{leagueId.image}}" alt="..." width='60%'/>
+
+                <h2 class=" text-center text-uppercase text-secondary mb-0">{{leagueId.name}}</h2>
+                  <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+                <br>
+                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editLeague" data-bs-dismiss="offcanvas" aria-label="Close">Editar</button>
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#deleteLeague" >Eliminar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
   </section>
 
   <!-- Modal Ascender-->
@@ -214,8 +301,55 @@
   <!-- Core theme JS-->
   <script src="js/scripts.js"></script>
 
+  <!--Modal Editar Liga-->
+  <div class="modal fade" id="editLeague" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar liga</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Nombre</label>
+              <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1"
+              id="nameLeague" name="name" #name="ngModel"[(ngModel)]="leagueId.name">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputUser" class="form-label">Image</label>
+              <input type="text" class="form-control" placeholder="image" aria-label="image" aria-describedby="basic-addon1"
+              id="image" name="image" #image="ngModel"[(ngModel)]="leagueId.image">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="editLeague()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
+<!-- Modal Eliminar -->
+<div class="modal fade" id="deleteLeague" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar Cuenta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estas seguro de que quieres eliminar: {{leagueId.name}}?
 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger"  data-bs-dismiss="modal" (click)="deleteLeague()">Eliminar liga</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 </body>

@@ -86,8 +86,8 @@ export class HomeComponent implements OnInit {
      this.teamTable.splice(0,this.teamTable.length);
   }
 
-  deleteLeague(id){
-    this._leagueService.deleteLeague(this.token,this._userService.getIdentity()._id,id).subscribe(
+  deleteLeague(){
+    this._leagueService.deleteLeague(this.token,this._userService.getIdentity()._id,this.leagueId._id).subscribe(
       response=>{
         Swal.fire({
           position: 'center',
@@ -144,6 +144,31 @@ export class HomeComponent implements OnInit {
           position: 'center',
           icon: 'error',
           title: error.error.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    )
+  }
+
+  editLeague(){
+    this._leagueService.editLeague(this.token,this._userService.getIdentity()._id,this.leagueId._id,this.leagueId).subscribe(
+      response=>{
+        console.log(response);
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'La liga se edito correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.getLeagues();
+      },
+      error=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'No se pudo editar',
           showConfirmButton: false,
           timer: 1500
         })

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { League } from 'src/app/models/league.model';
 import { User } from 'src/app/models/user.model';
+import { LeaguesService } from 'src/app/services/leagues.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
@@ -7,20 +9,27 @@ import Swal from 'sweetalert2';
   selector: 'app-count',
   templateUrl: './count.component.html',
   styleUrls: ['./count.component.css'],
-  providers: [UserService]
+  providers: [UserService,LeaguesService]
 })
 export class CountComponent implements OnInit {
   public userIdModel: User;
+  public leagueId: League;
   public userList;
+  public leagueList:{};
+  public token: String;
   constructor(
     public _userService: UserService,
+    public _leagueService: LeaguesService
   ) {
-    this.userIdModel = new User('','','','','','')
+    this.token = _userService.getToken();
+    this.userIdModel = new User('','','','','','');
+    this.leagueId = new League('','','','')
   }
 
 
   ngOnInit(): void {
     this.getUsers()
+    this.getLeagues()
   }
 
   editUser(){
@@ -123,6 +132,70 @@ export class CountComponent implements OnInit {
     )
   }
 
+  getLeagues(){
+    this._leagueService.getLeagues(this.token).subscribe(
+      response=>{
+        this.leagueList = response.ligas
+      }
+    )
+  }
+
+  getLeague(id){
+      this._leagueService.getLeague(id).subscribe(
+        response=>{
+          this.leagueId = response.league;
+        }
+      )
+  }
+
+  editLeague(){
+    this._leagueService.editLeague(this.token,this._userService.getIdentity()._id,this.leagueId._id,this.leagueId).subscribe(
+      response=>{
+        console.log(response);
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'La liga se edito correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.getLeagues();
+      },
+      error=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'No se pudo editar',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    )
+  }
+
+  deleteLeague(){
+    this._leagueService.deleteLeague(this.token,this._userService.getIdentity()._id,this.leagueId._id).subscribe(
+      response=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Se elimino correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        this.getLeagues()
+      },
+      error=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: error.error.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    )
+  }
+
 
 }
-

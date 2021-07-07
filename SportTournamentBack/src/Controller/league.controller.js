@@ -29,18 +29,20 @@ function getLeagues(req, res) {
   }
 }
 
-function getAllLeagues(req, res){
+function getAllLeagues(req, res) {
   var dataToken = req.user;
-  if(dataToken.rol == "ADMIN"){
-    LeagueModel.find({}, (err, ligas) => {
-      if (err) {
-        res
-          .status(500)
-          .send({ message: "Error en el servidor al obtener las ligas" });
-      } else {
-        res.status(200).send({ leagues: ligas });
-      }
-    });
+  if (dataToken.rol == "ADMIN") {
+    LeagueModel.find()
+      .populate("userCreator", "name")
+      .exec((err, ligas) => {
+        if (err) {
+          res
+            .status(500)
+            .send({ message: "Error en el servidor al obtener las ligas" });
+        } else {
+          res.status(200).send({ ligas });
+        }
+      });
   }
 }
 
@@ -215,5 +217,5 @@ module.exports = {
   editLeague,
   deleteLeague,
   getLeague,
-  getAllLeagues
+  getAllLeagues,
 };

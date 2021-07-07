@@ -45,5 +45,10 @@ export class LeaguesService {
     return this._http.delete(this.rute+'/user/'+idUser+'/league/'+idLeague,{headers: headersToken})
   }
 
+  getLeagues(token): Observable<any>{
+    let headersToken = this.headersVariable.set('Authorization', token );
+    return this._http.get(this.rute +'/user/leagues',{headers: headersToken})
+  }
+
 
 }

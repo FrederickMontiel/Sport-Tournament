@@ -23,7 +23,11 @@
               <li class="d-flex align-items-center me-3">
                 <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                  <button type="button" class="btn btn-danger"(click)="deleteLeague(liga._id)" >Eliminar</button>
+
+                  <button type="button" class="btn btn-danger"data-bs-toggle="modal" data-bs-target="#deleteLeague" (click)="getLeague(liga._id)" >Eliminar</button>
+
+                  <button type="button" class="btn btn-warning"  data-bs-toggle="modal" data-bs-target="#editLeague" (click)="getLeague(liga._id)">Editar</button>
+
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getLeague(liga._id)">Ver</button>
                 </div>
               </li>
@@ -87,7 +91,32 @@
 
       <div class="modal-footer">
         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-dismiss="modal" >Agregar equipo</button>
-        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" (click)="cleanArray()">Cerrar</button>
+
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#scoreModal">
+          Agregar marcador
+        </button>
+
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="cleanArray()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Score -->
+<div class="modal fade" id="scoreModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar Marcador </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
@@ -134,4 +163,52 @@
 <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 
+  <!--Modal Editar Liga-->
+  <div class="modal fade" id="editLeague" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar liga</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Nombre</label>
+              <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1"
+              id="nameLeague" name="name" #name="ngModel"[(ngModel)]="leagueId.name">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputUser" class="form-label">Image</label>
+              <input type="text" class="form-control" placeholder="image" aria-label="image" aria-describedby="basic-addon1"
+              id="image" name="image" #image="ngModel"[(ngModel)]="leagueId.image">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="editLeague()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Modal Eliminar -->
+<div class="modal fade" id="deleteLeague" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar Cuenta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estas seguro de que quieres eliminar: {{leagueId.name}}?
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger"  data-bs-dismiss="modal" (click)="deleteLeague()">Eliminar liga</button>
+      </div>
+    </div>
+  </div>
+</div>
