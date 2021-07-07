@@ -56,6 +56,36 @@ function getTeams(req, res) {
   }
 }
 
+function getMaxJourneys(req, res) {
+  var idUsuario = req.params.idUsuario;
+  var idLiga = req.params.idLiga;
+  var dataToken = req.user;
+
+  if (
+    dataToken.rol == "ADMIN" ||
+    (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)
+  ) {
+    TeamsModel.find({ league: idLiga }, (err, team) => {
+      if (err) {
+        res.status(500).send({
+          message: "Error en el servidor al integrar un equipo a una liga",
+        });
+      } else {
+        if (team && team.length > 0) {
+          var maximo = team.length;
+          res.status(200).send({maximo: maximo});
+        } else {
+          res
+            .status(404)
+            .send({ message: "Datos nulos como respuesta del servidor" });
+        }
+      }
+    });
+  } else {
+    res.status(500).send({ message: "No puedes ver los equipos" });
+  }
+}
+
 function getMoreData(id, callback) {
   scoreModel.find({ $or: [{ teamOne: id }, { teamTwo: id }] }, (err, data) => {
     if (err) {
@@ -310,4 +340,5 @@ module.exports = {
   getTeam,
   editTeam,
   deleteTeam,
+  getMaxJourneys
 };
