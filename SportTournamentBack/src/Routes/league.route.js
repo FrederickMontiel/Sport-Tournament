@@ -13,6 +13,7 @@ api.get(
   leagueController.getLeagues
 );
 api.get("/user/league/:idLiga", leagueController.getLeague);
+api.get("/user/leagues", leagueController.getAllLeagues);
 /*api.get(
   "/user/leagues",
   md_authentication.ensureAuth,
