@@ -138,3 +138,9 @@
     flex: 1;
   }
 }
+
+.imgTable {
+  width: 10%;
+  height: 50px;
+  border-radius: 50%;
+}

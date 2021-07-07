@@ -23,7 +23,7 @@
               <li class="d-flex align-items-center me-3">
                 <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                  <button type="button" class="btn btn-danger">Eliminar</button>
+                  <button type="button" class="btn btn-danger"(click)="deleteLeague(liga._id)" >Eliminar</button>
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getLeague(liga._id)">Ver</button>
                 </div>
               </li>
@@ -39,28 +39,47 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{leagueId.name}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
-        <table class="table table-dark table-hover" >
+        <table class="table table-dark table-hover text-center" >
           <thead>
             <tr >
-              <th scope="col">id</th>
-              <th scope="col">name</th>
+              <th scope="col">Icon</th>
+              <th scope="col">Name</th>
               <th scope="col">PJ</th>
               <th scope="col">G</th>
+              <th scope="col">E</th>
+              <th scope="col">P</th>
+              <th scope="col">GF</th>
+              <th scope="col">GC</th>
+              <th scope="col">DG</th>
+              <th scope="col">Pts</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let teams of teamTable ">
-              <th>{{teams._id}}</th>
+              <td><img src="{{teams.image}}" alt="" class="imgTable" ></td>
               <td>{{teams.name}}</td>
               <td>{{teams.marcador.pj}}</td>
               <td>{{teams.marcador.g}}</td>
+              <td>{{teams.marcador.e}}</td>
+              <td>{{teams.marcador.p}}</td>
+              <td>{{teams.marcador.gf}}</td>
+              <td>{{teams.marcador.gc}}</td>
+              <td>{{teams.marcador.dg}}</td>
+              <td>{{teams.marcador.pts}}</td>
+              <td>
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                  <button type="button" class="btn btn-danger"  data-bs-dismiss="modal" (click)="deleteTeam(teams.league,teams._id)" >Eliminar</button>
+                  <button type="button" class="btn btn-warning">Editar</button>
+                  <button type="button" class="btn btn-primary">Ver</button>
+                </div>
+              </td>
             </tr>
-
           </tbody>
         </table>
 
@@ -68,7 +87,7 @@
 
       <div class="modal-footer">
         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-dismiss="modal" >Agregar equipo</button>
-        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" (click)="cleanArray()">Cerrar</button>
       </div>
     </div>
   </div>

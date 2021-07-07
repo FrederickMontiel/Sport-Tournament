@@ -33,8 +33,16 @@ export class LeaguesService {
     return this._http.get(this.rute + 'user/league/'+id,{headers: this.headersVariable})
    }
 
-   getUser(id: String): Observable<any> {
-    return this._http.get(this.rute + 'user/getId/' + id, { headers: this.headersVariable })
+
+  editLeague(token,idUser,idLeague,league: League): Observable<any>{
+    let params = JSON.stringify(league);
+    let headersToken = this.headersVariable.set('Authorization', token );
+    return this._http.put(this.rute+'/user/'+idUser+'/league/'+idLeague,params,{headers: headersToken})
+  }
+
+  deleteLeague(token,idUser,idLeague): Observable<any> {
+    let headersToken = this.headersVariable.set('Authorization', token );
+    return this._http.delete(this.rute+'/user/'+idUser+'/league/'+idLeague,{headers: headersToken})
   }
 
 

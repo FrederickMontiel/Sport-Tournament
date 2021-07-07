@@ -15,10 +15,11 @@ import Swal from 'sweetalert2';
 export class HomeComponent implements OnInit {
   public leagueModel: League;
   public leagueId: League;
+  public teamId: {};
   public token: String;
   public modelGetLeague: League;
   public teamModel: Team;
-  public teamTable: {};
+  public teamTable: [];
   constructor(
     public _leagueService: LeaguesService,
     public _userService: UserService,
@@ -36,7 +37,6 @@ export class HomeComponent implements OnInit {
   getLeagues(){
     this._leagueService.listLeague(this.token, this._userService.getIdentity()._id).subscribe(
       response=>{
-        console.log(response.league)
       this.modelGetLeague = response.league;
       }
     )
@@ -45,7 +45,6 @@ export class HomeComponent implements OnInit {
   getLeague(id){
     this._leagueService.getLeague(id).subscribe(
       response=>{
-        console.log(response.league)
         this.leagueId = response.league;
         this.getTeams(id)
       }
@@ -78,13 +77,79 @@ export class HomeComponent implements OnInit {
   getTeams(idLeague){
     this._teamService.getTeams(this.token,this._userService.getIdentity()._id,idLeague).subscribe(
       response=>{
-        console.log(response.teams)
         this.teamTable = response.teams;
-      },
-      error=>{
-        console.log(error.error.message)
-         console.log(idLeague)
       }
     )
   }
+
+  cleanArray(){
+     this.teamTable.splice(0,this.teamTable.length);
+  }
+
+  deleteLeague(id){
+    this._leagueService.deleteLeague(this.token,this._userService.getIdentity()._id,id).subscribe(
+      response=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Se elimino correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        this.getLeagues()
+      },
+      error=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: error.error.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    )
+  }
+
+  /*getTeam(idLeague,idTeam){
+    this._teamService.getTeam(this.token,this._userService.getIdentity()._id,idLeague,idTeam).subscribe(
+      response=>{
+        console.log(response.team)
+      }
+    )
+  }*/
+
+  getTeam(idLeague,idTeam){
+    this._teamService.getTeam(this.token,this._userService.getIdentity()._id,idLeague,idTeam).subscribe(
+      response=>{
+        this.teamId = response;
+        localStorage.setItem('team',JSON.stringify(this.teamId))
+      }
+    )
+  }
+
+  deleteTeam(idLeague,idTeam){
+    this._teamService.deleteTeam(this.token,this._userService.getIdentity()._id,idLeague,idTeam).subscribe(
+      response=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Se elimino correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        })
+       this.cleanArray()
+      },
+      error=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: error.error.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    )
+  }
+
+
 }

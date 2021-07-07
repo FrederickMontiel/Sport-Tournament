@@ -33,6 +33,7 @@ function getTeams(req, res) {
                   _id: dato._id,
                   name: dato.name,
                   image: dato.image,
+                  league: dato.league,
                   marcador,
                 });
               }
@@ -121,30 +122,31 @@ function getTeam(req, res) {
     dataToken.rol == "ADMIN" ||
     (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)
   ) {
-    TeamsModel.findOne({ _id : idTeam, league: idLiga }, (err, team) => {
+    TeamsModel.findOne({ _id: idTeam, league: idLiga }, (err, team) => {
       if (err) {
         res.status(500).send({
           message: "Error en el servidor al integrar un equipo a una liga",
         });
       } else {
         if (team) {
-            var responseData = [];
+          var responseData = [];
 
-            getMoreData(team._id, (err, marcador) => {
-              if (err) {
-                res.status(500).send({ message: err });
-              } else {
-                responseData.push({
-                  _id: team._id,
-                  name: team.name,
-                  image: team.image,
-                  userCreator: team.userCreator,
-                  marcador,
-                });
-                res.status(200).send(responseData);
-              }
-            });
-            //res.status(200).send({ equipos: team });
+          getMoreData(team._id, (err, marcador) => {
+            if (err) {
+              res.status(500).send({ message: err });
+            } else {
+              responseData.push({
+                _id: team._id,
+                name: team.name,
+                image: team.image,
+                userCreator: team.userCreator,
+                league: team.league,
+                marcador,
+              });
+              res.status(200).send({ team: responseData });
+            }
+          });
+          //res.status(200).send({ equipos: team });
         } else {
           res
             .status(404)
@@ -177,36 +179,36 @@ function addTeam(req, res) {
           });
         } else {
           if (!teamFound) {
-            teamsModel.find({league: idLiga}, (err, equipos) => {
-              if(err){
+            teamsModel.find({ league: idLiga }, (err, equipos) => {
+              if (err) {
                 res.status(500).send({
                   message: "Error al buscar equipos de una liga",
                 });
-              }else{
-                if(equipos.length < 10){
+              } else {
+                if (equipos.length < 10) {
                   var modelo = new TeamsModel({
                     name: params.name,
                     image: params.image,
                     league: idLiga,
                   });
                   modelo.save((err, equipo) => {
-                    if(err){
+                    if (err) {
                       res.status(500).send({
                         message: "Error al agregar equipo",
                       });
-                    }else{
-                      if(equipo){
+                    } else {
+                      if (equipo) {
                         res.status(200).send({
-                          equipo
+                          equipo,
                         });
-                      }else{
+                      } else {
                         res.status(500).send({
                           message: "Datos no encontrados",
                         });
                       }
                     }
                   });
-                }else{
+                } else {
                   res.status(403).send({
                     message: "Maximo de equipos en esta liga alcanzado",
                   });
