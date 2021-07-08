@@ -150,8 +150,6 @@ function editLeague(req, res) {
   var schema = {};
   params.name ? (schema.name = params.name) : null;
   params.image ? (schema.image = params.image) : null;
-  dataToken.rol == "ADMIN" ? (schema.userCreator = idUsuario) : null;
-
   if (
     dataToken.rol == "ADMIN" ||
     (dataToken.rol == "CLIENT" && createUser == dataToken.sub)
