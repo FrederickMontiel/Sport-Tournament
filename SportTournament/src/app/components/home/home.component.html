@@ -220,7 +220,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Eliminar Cuenta</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar Liga</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -251,7 +251,7 @@
       <p class="masthead-subheading font-weight-light mb-0 fs-3"></p>
       <div class="btn-group" role="group" aria-label="Basic outlined example">
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editTeam" data-bs-dismiss="offcanvas" aria-label="Close">Editar</button>
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#deleteLeague" >Eliminar</button>
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#deleteTeam" >Eliminar</button>
       </div>
       <br>
     </div>
@@ -287,6 +287,25 @@
       </div>
     </div>
   </div>
+
+<!-- Modal Eliminar Equipo -->
+<div class="modal fade" id="deleteTeam" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar Equipo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estas seguro de que quieres eliminar: {{teamModel.name}}?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger"  data-bs-dismiss="modal" (click)="deleteTeam()">Eliminar equipo</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

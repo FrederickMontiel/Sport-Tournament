@@ -159,8 +159,8 @@ export class HomeComponent implements OnInit {
     )
   }
 
-  deleteTeam(idLeague,idTeam){
-    this._teamService.deleteTeam(this.token,this._userService.getIdentity()._id,idLeague,idTeam).subscribe(
+  deleteTeam(){
+    this._teamService.deleteTeam(this.token,this._userService.getIdentity()._id,this.teamModel.league,this.teamModel._id).subscribe(
       response=>{
         Swal.fire({
           position: 'center',
