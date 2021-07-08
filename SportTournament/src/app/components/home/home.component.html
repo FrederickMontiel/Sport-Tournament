@@ -1,5 +1,5 @@
 
-
+<!-- Pagina principal -->
 <main>
   <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
     <div class="col-md-5 p-lg-5 mx-auto my-5">
@@ -10,35 +10,32 @@
     <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
   </div>
 
-
-    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5" >
-      <div class="col" *ngFor="let liga of modelGetLeague">
-        <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('{{liga.image}}');  background-size: 70% 70%" >
-          <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">{{liga.name}}</h2>
-            <ul class="d-flex list-unstyled mt-auto">
-              <li class="me-auto">
-                <img src="https://www.mcicon.com/wp-content/uploads/2021/01/Sport_Football_1-copy-3-600x600.jpg" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
-              </li>
-              <li class="d-flex align-items-center me-3">
-                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
-                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-
-                  <button type="button" class="btn btn-danger"data-bs-toggle="modal" data-bs-target="#deleteLeague" (click)="getLeague(liga._id)" >Eliminar</button>
-
-                  <button type="button" class="btn btn-warning"  data-bs-toggle="modal" data-bs-target="#editLeague" (click)="getLeague(liga._id)">Editar</button>
-
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getLeague(liga._id)">Ver</button>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+<!-- Ligas -->
+  <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5" >
+    <div class="col" *ngFor="let liga of modelGetLeague">
+      <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('{{liga.image}}');  background-size: 70% 70%" >
+        <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+          <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">{{liga.name}}</h2>
+          <ul class="d-flex list-unstyled mt-auto">
+            <li class="me-auto">
+              <img src="https://www.mcicon.com/wp-content/uploads/2021/01/Sport_Football_1-copy-3-600x600.jpg" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+            </li>
+            <li class="d-flex align-items-center me-3">
+              <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+              <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                <button type="button" class="btn btn-danger"data-bs-toggle="modal" data-bs-target="#deleteLeague" (click)="getLeague(liga._id)" >Eliminar</button>
+                <button type="button" class="btn btn-warning"  data-bs-toggle="modal" data-bs-target="#editLeague" (click)="getLeague(liga._id)">Editar</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getLeague(liga._id)">Ver</button>
+            </div>
+          </li>
+        </ul>
       </div>
+    </div>
   </div>
+</div>
 
 
-<!-- Modal -->
+<!-- Equipos de liga -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -47,7 +44,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-
         <table class="table table-dark table-hover text-center" >
           <thead>
             <tr >
@@ -78,24 +74,18 @@
               <td>{{teams.marcador.pts}}</td>
               <td>
                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                  <button type="button" class="btn btn-danger"  data-bs-dismiss="modal" (click)="deleteTeam(teams.league,teams._id)" >Eliminar</button>
-                  <button type="button" class="btn btn-warning">Editar</button>
-                  <button type="button" class="btn btn-primary">Ver</button>
+                  <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEquipo" aria-controls="offcanvasEquipo" data-bs-dismiss="modal" (click)="getTeamUser(teams._id)" >Ver</button>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-
       </div>
-
       <div class="modal-footer">
         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-dismiss="modal" >Agregar equipo</button>
-
-        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#scoreModal" (click)="getJourneys(leagueId._id)">
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#scoreModal" data-bs-dismiss="modal" (click)="getJourneys(leagueId._id)">
           Agregar marcador
         </button>
-
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="cleanArray()">Cerrar</button>
       </div>
     </div>
@@ -103,7 +93,7 @@
 </div>
 
 
-<!-- Modal Score -->
+<!-- Score Modal -->
 <div class="modal fade" id="scoreModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -112,7 +102,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-
         <div class="mb-3 row">
           <label for="inputPassword" class="col-sm-2 col-form-label">Jornada:</label>
           <div class="col-sm-10">
@@ -122,7 +111,6 @@
             </select>
           </div>
         </div>
-
         <form action="" class="row g-3 text-center">
           <div class="col-md-5">
             <label for="inputEmail4" class="form-label">Equipo 1</label>
@@ -158,34 +146,30 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="addScore()" >Save changes</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addScore()" >Save changes</button>
       </div>
     </div>
   </div>
 </div>
 
 
-
+<!-- OffCanvas Agregar Equipo -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
     <h5 id="offcanvasRightLabel">Agregar equipo a {{leagueId.name}}</h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-
     <div class="container d-flex align-items-center flex-column" style="width: 250px;">
       <img class="masthead-avatar mb-5" src="{{leagueId.image}}" alt="..." width='70%'/>
-
       <h2 class=" text-center text-uppercase text-secondary mb-0"></h2>
         <div class="divider-custom">
           <div class="divider-custom-line"></div>
           <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
           <div class="divider-custom-line"></div>
       </div>
-
       <p class="masthead-subheading font-weight-light mb-0 fs-3"></p>
       <br>
-
       <form class="text-center" >
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Nombre del equipo</label>
@@ -195,17 +179,13 @@
           <label for="exampleInputPassword1" class="form-label">Imagen(Url)</label>
           <input type="text" class="form-control" id="exampleInputPassword1" name="image" #image="ngModel"[(ngModel)]='teamModel.image'>
         </div>
-        <button type="submit" class="btn btn-primary" (click)="addTeam(leagueId._id)" >Guardar equipo</button>
+        <button type="submit" class="btn btn-primary"  data-bs-dismiss="offcanvas" (click)="addTeam(leagueId._id)" >Guardar equipo</button>
       </form>
-
     </div>
   </div>
 </div>
 
-<script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-
-  <!--Modal Editar Liga-->
+  <!--Editar Liga Modal-->
   <div class="modal fade" id="editLeague" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -235,7 +215,7 @@
     </div>
   </div>
 
-  <!-- Modal Eliminar -->
+<!-- Modal Eliminar Liga -->
 <div class="modal fade" id="deleteLeague" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -245,7 +225,6 @@
       </div>
       <div class="modal-body">
         ¿Estas seguro de que quieres eliminar: {{leagueId.name}}?
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
@@ -254,3 +233,61 @@
     </div>
   </div>
 </div>
+
+<!-- OffCanvas Equipo -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEquipo" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="container d-flex align-items-center flex-column" style="width: 250px;">
+      <img class="masthead-avatar mb-5" src="{{teamModel.image}}" alt="..." width='70%'/>
+      <h2 class=" text-center text-uppercase text-secondary mb-0">{{teamModel.name}}</h2>
+      <div class="divider-custom">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+        <div class="divider-custom-line"></div>
+    </div>
+      <p class="masthead-subheading font-weight-light mb-0 fs-3"></p>
+      <div class="btn-group" role="group" aria-label="Basic outlined example">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editTeam" data-bs-dismiss="offcanvas" aria-label="Close">Editar</button>
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#deleteLeague" >Eliminar</button>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>
+
+  <!--Editar Equipo Modal-->
+  <div class="modal fade" id="editTeam" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar Equipo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Nombre</label>
+              <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1"
+              id="nameLeague" name="name" #name="ngModel"[(ngModel)]="teamModel.name">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputUser" class="form-label">Image</label>
+              <input type="text" class="form-control" placeholder="image" aria-label="image" aria-describedby="basic-addon1"
+              id="image" name="image" #image="ngModel"[(ngModel)]="teamModel.image">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="editTeam()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

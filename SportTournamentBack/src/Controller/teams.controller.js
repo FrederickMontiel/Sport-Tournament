@@ -73,7 +73,7 @@ function getMaxJourneys(req, res) {
       } else {
         if (team && team.length > 0) {
           var maximo = team.length;
-          res.status(200).send({maximo: maximo});
+          res.status(200).send({ maximo: maximo });
         } else {
           res
             .status(404)
@@ -189,6 +189,16 @@ function getTeam(req, res) {
   }
 }
 
+function getTeamUser(req, res) {
+  var idTeam = req.params.idTeam;
+  TeamsModel.findById(idTeam).exec((err, team) => {
+    if (err) return res.status(500).send({ message: "Error" });
+    if (team) {
+      return res.status(200).send({ team });
+    }
+  });
+}
+
 //add teams
 function addTeam(req, res) {
   var params = req.body;
@@ -269,9 +279,6 @@ function editTeam(req, res) {
   var schema = {};
   params.name ? (schema.name = params.name) : null;
   params.image ? (schema.image = params.image) : null;
-  dataToken.rol == "ADMIN" ? (schema.league = idLeague) : null;
-
-  dataToken.rol == "ADMIN" ? (schema.league = idLeague) : null;
 
   if (
     dataToken.rol == "ADMIN" ||
@@ -340,5 +347,6 @@ module.exports = {
   getTeam,
   editTeam,
   deleteTeam,
-  getMaxJourneys
+  getMaxJourneys,
+  getTeamUser,
 };

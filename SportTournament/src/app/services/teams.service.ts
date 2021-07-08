@@ -37,9 +37,19 @@ export class TeamsService {
     return this._http.delete(this.rute+'user/'+idUser+'/league/'+idLeague+'/team/'+idTeam,{headers: headersToken})
    }
 
-   getJourneys(token,idUser,idLeague): Observable<any>{
+   editTeam(token,idUser,idLeague,idTeam,team:Team):Observable<any>{
+    let params = JSON.stringify(team);
+    let headersToken = this.headersVariable.set('Authorization', token)
+    return this._http.put(this.rute+'user/'+idUser+'/league/'+idLeague+'/team/'+idTeam,params,{headers: headersToken})
+   }
+
+  getJourneys(token,idUser,idLeague): Observable<any>{
     let headersToken = this.headersVariable.set('Authorization', token)
     return this._http.get(this.rute+'user/'+idUser+'/league/'+idLeague+'/max',{headers: headersToken})
+  }
+
+  getTeamUser(idTeam):Observable<any> {
+    return this._http.get(this.rute + 'getTeam/'+idTeam,{headers: this.headersVariable})
   }
 
 }

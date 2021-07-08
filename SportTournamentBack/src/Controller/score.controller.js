@@ -44,55 +44,56 @@ function addScore(req, res) {
     dataToken.rol == "ADMIN" ||
     (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)
   ) {
-    if(params.teamOne != params.teamTwo){
-        verifyNumberJurneys(params.journey, idLiga, (err) => {
+    if (params.teamOne != params.teamTwo) {
+      verifyNumberJurneys(params.journey, idLiga, (err) => {
         if (err) {
-            res.status(500).send({ message: err });
+          res.status(500).send({ message: err });
         } else {
-            verifyBothTeamsExists(params.teamOne, params.teamTwo, (err) => {
+          verifyBothTeamsExists(params.teamOne, params.teamTwo, (err) => {
             if (err) {
-                res.status(500).send({ message: err });
+              res.status(500).send({ message: err });
             } else {
-                verifyConfrontationIsExist(
+              verifyConfrontationIsExist(
                 params.teamOne,
                 params.teamTwo,
                 idLiga,
                 (exist) => {
-                    if (exist) {
+                  if (exist) {
                     res.status(500).send({ message: exist });
-                    } else {
+                  } else {
                     if (params.teamOne != params.teamTwo) {
-                        var modelo = new ScoreModel({
+                      var modelo = new ScoreModel({
                         journey: params.journey,
                         league: idLiga,
                         teamOne: params.teamOne,
                         pointsOne: params.pointsOne,
                         teamTwo: params.teamTwo,
                         pointsTwo: params.pointsTwo,
-                        });
+                      });
 
-                        modelo.save((err, saved) => {
+                      modelo.save((err, saved) => {
                         if (err) {
-                            res
+                          res
                             .status(500)
                             .send({ message: "Error al agregar score" });
                         } else {
-                            res.status(200).send({ message: saved });
+                          res.status(200).send({ message: saved });
                         }
-                        });
+                      });
                     } else {
-                        res.status(403).send({
+                      res.status(403).send({
                         message: "Los equipos no pueden ser los mismos",
-                        });
+                      });
                     }
-                    }
+                  }
                 }
-                );
+              );
             }
-            });
-            
+          });
         }
-        });
+      });
+    } else {
+      res.status(500).send({ message: "Son los mismos equipos" });
     }
   } else {
     res.status(500).send({ message: "No puedes agregar los equipos" });
@@ -201,7 +202,7 @@ function verifyNumberJurneys(numero, liga, callback) {
 function verifyBothTeamsExists(teamOne, teamTwo, callback) {
   console.log(teamOne, teamTwo);
   TeamsModel.findOne({ _id: teamOne }, (err, equipoOne) => {
-    console.log("Si esta el", equipoOne._id);
+    console.log("Si esta el", equipoOne);
     if (err) {
       callback(
         "Error en la consulta al verificar la existencia del equipo 1",

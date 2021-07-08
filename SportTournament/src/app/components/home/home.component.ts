@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 export class HomeComponent implements OnInit {
   public leagueModel: League;
   public leagueId: League;
-  public teamId: {};
+  public teamId: {team};
   public select: any=[];
   public token: String;
   public modelGetLeague: League;
@@ -99,18 +99,17 @@ export class HomeComponent implements OnInit {
           title: error.error.message,
           showConfirmButton: false,
           timer: 1500
-        }),
-        console.log(this.scoreModel)
-        console.log(this.leagueId._id)
+        })
       }
     )
   }
 
   getTeams(idLeague){
-
+    this.teamTable = [];
     this._teamService.getTeams(this.token,this._userService.getIdentity()._id,idLeague).subscribe(
       response=>{
         this.teamTable = response.teams;
+        this.teamTable.sort(function(a, b){return a - b});
       }
     )
   }
@@ -155,7 +154,7 @@ export class HomeComponent implements OnInit {
     this._teamService.getTeam(this.token,this._userService.getIdentity()._id,idLeague,idTeam).subscribe(
       response=>{
         this.teamId = response;
-        localStorage.setItem('team',JSON.stringify(this.teamId))
+        this.teamModel = response.team;
       }
     )
   }
@@ -224,4 +223,37 @@ export class HomeComponent implements OnInit {
     )
   }
 
+  getTeamUser(idTeam){
+    this._teamService.getTeamUser(idTeam).subscribe(
+      response=>{
+        this.teamModel = response.team
+
+      }
+    )
+  }
+
+  editTeam(){
+
+    this._teamService.editTeam(this.token,this._userService.getIdentity()._id,this.teamModel.league,this.teamModel._id,this.teamModel).subscribe(
+      response=>{
+        console.log(response);
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'El equipo se edito correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      },
+      error=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'No se pudo editar',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+    )
+  }
 }
