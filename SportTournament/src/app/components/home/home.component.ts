@@ -259,5 +259,26 @@ editTeam(){
   }
 
   generarPDF(){
-  }
+    this._teamService.generatePdf(this._userService.getToken(),this._userService.getIdentity()._id,this.leagueId._id).subscribe(
+      response=>{
+        window.location = response.url;
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Se esta descargando el PDF',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      },error=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Error',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        console.log(error)
+      }
+      )
+    }
 }

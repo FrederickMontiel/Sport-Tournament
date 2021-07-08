@@ -61,7 +61,34 @@ export class CountComponent implements OnInit {
   }
 
   ascend(id){
-    this._userService.ascendClient(id).subscribe(
+    let a:User = this.userIdModel;
+    a.rol = "ADMIN";
+    this._userService.editUser(a,id).subscribe(
+      response=>{
+        console.log(response);
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'El usuario se edito correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        localStorage.setItem('User',JSON.stringify(this.userIdModel))
+        this.getUsers();
+      },
+      error=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'No se pudo editar',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        console.log(this.userIdModel._id)
+
+      }
+    )
+    /*this._userService.ascendClient(id).subscribe(
       response=>{
         console.log(response);
         Swal.fire({
@@ -84,7 +111,7 @@ export class CountComponent implements OnInit {
         })
         localStorage.setItem('Error',error.message)
       }
-    )
+    )*/
   }
 
   getUsers(){

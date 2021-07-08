@@ -52,4 +52,9 @@ export class TeamsService {
     return this._http.get(this.rute + 'getTeam/'+idTeam,{headers: this.headersVariable})
   }
 
+  generatePdf(token,idUser,idLeague): Observable<any>{
+    let headersToken = this.headersVariable.set('Authorization', token)
+    return this._http.post(this.rute+ '/user/'+idUser+'/league/'+idLeague+'/pdf',null, {headers: headersToken})
+  }
+
 }
