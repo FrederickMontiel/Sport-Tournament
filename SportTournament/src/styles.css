@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+
 * {
   font-family: "Montserrat";
+  src: url(assets/fonts/montserrat-black_[allfont.es].ttf) format("opentype");
 }
