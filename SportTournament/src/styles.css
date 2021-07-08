@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap");
+
 * {
-  font-family: "montserrat-black";
-  src: url(assets/fonts/montserrat-black_[allfont.es].ttf) format("TTF");
+  font-family: "Montserrat", sans-serif;
 }
