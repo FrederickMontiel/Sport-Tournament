@@ -22,6 +22,7 @@ api.delete(
   md_authentication.ensureAuth,
   userController.deleteUser
 );
+api.put("/user/ascend/:idUser", userController.ascend);
 
 //Exports
 module.exports = api;

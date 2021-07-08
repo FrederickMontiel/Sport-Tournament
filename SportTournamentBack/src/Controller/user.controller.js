@@ -343,14 +343,14 @@ function ascend(req, res) {
     { rol: "ADMIN" },
     { new: true },
     (err, userAcend) => {
-      if (err) return res.status(500).send({ message: "Error en la peticion" });
+      if (err) res.status(500).send({ message: "Error en la peticion" });
 
       if (!userAcend)
-        return res
+        res
           .status(500)
           .send({ message: "No se a podido editar al Usuario" });
 
-      return res.status(200).send({ message: "Se ascendio con exito" });
+      res.status(200).send({ message: "Se ascendio con exito" });
     }
   );
 }
