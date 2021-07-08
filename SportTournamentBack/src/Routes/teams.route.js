@@ -23,6 +23,11 @@ api.get(
   teamController.getTeam
 );
 api.post(
+  "/user/:idUsuario/league/:idLiga/pdf",
+  md_authentication.ensureAuth,
+  teamController.genPdf
+);
+api.post(
   "/user/:idUsuario/league/:idLiga/team",
   md_authentication.ensureAuth,
   teamController.addTeam

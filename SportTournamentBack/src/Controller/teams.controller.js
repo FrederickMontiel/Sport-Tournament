@@ -3,6 +3,8 @@ const teamsModel = require("../models/teams.model");
 const scoreModel = require("../models/score.model");
 const TeamsModel = require("../models/teams.model");
 const { model } = require("mongoose");
+const leagueModel = require("../models/league.model");
+const htmlPdf = require("html-pdf");
 
 //list teams
 function getTeams(req, res) {
@@ -341,6 +343,129 @@ function deleteTeam(req, res) {
   }
 }
 
+function genPdf(req, res){
+  var idUsuario = req.params.idUsuario;
+  var idLiga = req.params.idLiga;
+  var dataToken = req.user;
+
+  if (
+    dataToken.rol == "ADMIN" ||
+    (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)
+  ) {
+    TeamsModel.find({ league: idLiga }, (err, team) => {
+      if (err) {
+        res.status(500).send({
+          message: "Error en el servidor al integrar un equipo a una liga",
+        });
+      } else {
+        if (team && team.length > 0) {
+          var responseData = [];
+
+          team.forEach((dato) => {
+            getMoreData(dato._id, (err, marcador) => {
+              if (err) {
+                //"Error en el servidor: No se pudo obtener la cantidad de puntos"
+                res.status(500).send({ message: err });
+              } else {
+                responseData.push({
+                  _id: dato._id,
+                  name: dato.name,
+                  image: dato.image,
+                  league: dato.league,
+                  marcador,
+                });
+              }
+
+              if (team[team.length - 1]._id == dato._id) {
+                writePdf(responseData, req, res);
+                //res.status(200).send({ teams: responseData });
+              }
+            });
+            //res.status(200).send({ equipos: team });
+          });
+        } else {
+          res
+            .status(404)
+            .send({ message: "Datos nulos como respuesta del servidor" });
+        }
+      }
+    });
+  } else {
+    res.status(500).send({ message: "No puedes ver los equipos" });
+  }
+}
+
+function writePdf(datos, req, res){
+  var contentPDF =
+      `<!DOCTYPE html>
+      <html>
+      <head>
+        <style>*{font-family: arial;} table{width: 100%; border-collapse: collapse;} td{width: 25%;} .scoreData{background-color: black; color: white; font-weight: bolder;}</style>
+      </head>
+      <body>
+      <h3>` + datos.name + `</h3>
+      <table>
+        <tr>
+          <td class='scoreData'>Imagen</td>
+          <td class='scoreData'>Nombre</td>
+          <td class='scoreData'>PJ</td>
+          <td class='scoreData'>G</td>
+          <td class='scoreData'>E</td>
+          <td class='scoreData'>P</td>
+          <td class='scoreData'>GF</td>
+          <td class='scoreData'>GC</td>
+          <td class='scoreData'>DG</td>
+          <td class='scoreData'>PTS</td>
+        </tr>`;
+
+      datos.forEach(dato => {
+        contentPDF += `<tr>
+          <td class='scoreData'>` + dato.image + `</td>
+          <td class='scoreData'>` + dato.name + `</td>
+          <td class='scoreData'>` + dato.marcador.pj + `</td>
+          <td class='scoreData'>` + dato.marcador.g + `</td>
+          <td class='scoreData'>` + dato.marcador.e + `</td>
+          <td class='scoreData'>` + dato.marcador.p + `</td>
+          <td class='scoreData'>` + dato.marcador.gf + `</td>
+          <td class='scoreData'>` + dato.marcador.gc + `</td>
+          <td class='scoreData'>` + dato.marcador.dg + `</td>
+          <td class='scoreData'>` + dato.marcador.pts + `</td>
+        </tr>`;
+      });
+      
+    contentPDF += `</table>
+  </body>
+  </html>`;
+
+  leagueModel.findById(datos[0].league, (err, a) => {
+    if(err){
+      res.status(500).send({message: "Error al buscar datos de la liga"});
+    }else{
+      if(a){
+        //if(fs.existsSync("./pdf/teams/." + a._id + ".pdf")){
+          htmlPdf
+          .create(contentPDF)
+          .toFile(
+            "./pdf/teams/" + a._id + ".pdf",
+            (err, response) => {
+              if (err) {
+                res.status(500).send({
+                  message:"Error al crear el pdf"
+                });
+              } else {
+                console.log(__dirname);
+                res.download(__dirname + "../../../pdf/teams/" + a._id + ".pdf");
+              }
+            }
+          );
+        //}
+      }else{
+        res.status(404).send({message: "No se pudo encontrar la liga"});
+      }
+    }
+  });
+}
+
 module.exports = {
   addTeam,
   getTeams,
@@ -349,4 +474,5 @@ module.exports = {
   deleteTeam,
   getMaxJourneys,
   getTeamUser,
+  genPdf
 };
