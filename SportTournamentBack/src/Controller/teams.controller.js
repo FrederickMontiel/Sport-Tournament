@@ -396,53 +396,51 @@ function genPdf(req, res){
 }
 
 function writePdf(datos, req, res){
-  var contentPDF =
-      `<!DOCTYPE html>
-      <html>
-      <head>
-        <style>*{font-family: arial;} table{width: 100%; border-collapse: collapse;} td{width: 25%;} .scoreData{background-color: black; color: white; font-weight: bolder;}</style>
-      </head>
-      <body>
-      <h3>` + datos.name + `</h3>
-      <table>
-        <tr>
-          <td class='scoreData'>Imagen</td>
-          <td class='scoreData'>Nombre</td>
-          <td class='scoreData'>PJ</td>
-          <td class='scoreData'>G</td>
-          <td class='scoreData'>E</td>
-          <td class='scoreData'>P</td>
-          <td class='scoreData'>GF</td>
-          <td class='scoreData'>GC</td>
-          <td class='scoreData'>DG</td>
-          <td class='scoreData'>PTS</td>
-        </tr>`;
-
-      datos.forEach(dato => {
-        contentPDF += `<tr>
-          <td class='scoreData'>` + dato.image + `</td>
-          <td class='scoreData'>` + dato.name + `</td>
-          <td class='scoreData'>` + dato.marcador.pj + `</td>
-          <td class='scoreData'>` + dato.marcador.g + `</td>
-          <td class='scoreData'>` + dato.marcador.e + `</td>
-          <td class='scoreData'>` + dato.marcador.p + `</td>
-          <td class='scoreData'>` + dato.marcador.gf + `</td>
-          <td class='scoreData'>` + dato.marcador.gc + `</td>
-          <td class='scoreData'>` + dato.marcador.dg + `</td>
-          <td class='scoreData'>` + dato.marcador.pts + `</td>
-        </tr>`;
-      });
-      
-    contentPDF += `</table>
-  </body>
-  </html>`;
-
   leagueModel.findById(datos[0].league, (err, a) => {
     if(err){
       res.status(500).send({message: "Error al buscar datos de la liga"});
     }else{
       if(a){
-        //if(fs.existsSync("./pdf/teams/." + a._id + ".pdf")){
+        var contentPDF =
+          `<!DOCTYPE html>
+          <html>
+          <head>
+            <style>*{font-family: arial;} table{width: 100%; border-collapse: collapse;} td{width: 10%;} .scoreData{background-color: black; color: white; font-weight: bolder;}</style>
+          </head>
+          <body>
+          <h3>` + a.name + `</h3>
+          <table>
+            <tr>
+              <td class='scoreData'>Imagen</td>
+              <td class='scoreData'>Nombre</td>
+              <td class='scoreData'>PJ</td>
+              <td class='scoreData'>G</td>
+              <td class='scoreData'>E</td>
+              <td class='scoreData'>P</td>
+              <td class='scoreData'>GF</td>
+              <td class='scoreData'>GC</td>
+              <td class='scoreData'>DG</td>
+              <td class='scoreData'>PTS</td>
+            </tr>`;
+          datos.forEach(dato => {
+            contentPDF += `<tr>
+              <td><img src="` + dato.image + `" style="width: 25px; height: 25px;"></td>
+              <td>` + dato.name + `</td>
+              <td>` + dato.marcador.pj + `</td>
+              <td>` + dato.marcador.g + `</td>
+              <td>` + dato.marcador.e + `</td>
+              <td>` + dato.marcador.p + `</td>
+              <td>` + dato.marcador.gf + `</td>
+              <td>` + dato.marcador.gc + `</td>
+              <td>` + dato.marcador.dg + `</td>
+              <td>` + dato.marcador.pts + `</td>
+            </tr>`;
+          });
+          
+        contentPDF += `</table>
+      </body>
+      </html>`;
+
           htmlPdf
           .create(contentPDF)
           .toFile(
