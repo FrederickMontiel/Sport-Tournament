@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { League } from 'src/app/models/league.model';
+import { Score } from 'src/app/models/score.model';
 import { Team } from 'src/app/models/team.model';
 import { LeaguesService } from 'src/app/services/leagues.service';
+import { ScoreService } from 'src/app/services/score.service';
 import { TeamsService } from 'src/app/services/teams.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
@@ -10,24 +12,28 @@ import Swal from 'sweetalert2';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  providers: [LeaguesService, UserService,TeamsService]
+  providers: [LeaguesService, UserService,TeamsService,ScoreService]
 })
 export class HomeComponent implements OnInit {
   public leagueModel: League;
   public leagueId: League;
   public teamId: {};
+  public select: any=[];
   public token: String;
   public modelGetLeague: League;
   public teamModel: Team;
+  public scoreModel: Score;
   public teamTable: [];
   constructor(
     public _leagueService: LeaguesService,
     public _userService: UserService,
-    public _teamService: TeamsService
+    public _teamService: TeamsService,
+    public _scoreService: ScoreService
   ){
     this.token = _userService.getToken();
     this.leagueId = new League("","","","")
     this.teamModel = new Team("","","","");
+    this.scoreModel= new Score("",0,"","",0,"",0)
    }
 
   ngOnInit(): void {
@@ -74,7 +80,34 @@ export class HomeComponent implements OnInit {
     )
   }
 
+  addScore(){
+    this.scoreModel.league = this.leagueId._id
+    this._scoreService.addScore(this.token,this.scoreModel,this._userService.getIdentity()._id,this.leagueId._id).subscribe(
+      response=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Se agrego correctamente el marcador',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.getTeams(this.leagueId._id)
+      },error=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: error.error.message,
+          showConfirmButton: false,
+          timer: 1500
+        }),
+        console.log(this.scoreModel)
+        console.log(this.leagueId._id)
+      }
+    )
+  }
+
   getTeams(idLeague){
+
     this._teamService.getTeams(this.token,this._userService.getIdentity()._id,idLeague).subscribe(
       response=>{
         this.teamTable = response.teams;
@@ -176,5 +209,19 @@ export class HomeComponent implements OnInit {
     )
   }
 
+  getJourneys(idLeague){
+    this.select=[];
+    this._teamService.getJourneys(this.token,this._userService.getIdentity()._id,idLeague).subscribe(
+      response=>{
+        let temporal;;
+        console.log(response.maximo)
+        temporal = response.maximo;
+        for(let i=0; i<temporal-1;i++){
+          this.select.push(i+1);
+        }
+        console.log(this.select)
+      },
+    )
+  }
 
 }
