@@ -24,7 +24,6 @@ api.get(
 );
 api.post(
   "/user/:idUsuario/league/:idLiga/pdf",
-  md_authentication.ensureAuth,
   teamController.genPdf
 );
 api.post(
@@ -43,6 +42,7 @@ api.delete(
   teamController.deleteTeam
 );
 api.get("/getTeam/:idTeam", teamController.getTeamUser);
+api.get("/pdf/:idPdf", teamController.getPdf);
 
 //Exports
 module.exports = api;

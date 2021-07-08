@@ -346,12 +346,7 @@ function deleteTeam(req, res) {
 function genPdf(req, res){
   var idUsuario = req.params.idUsuario;
   var idLiga = req.params.idLiga;
-  var dataToken = req.user;
 
-  if (
-    dataToken.rol == "ADMIN" ||
-    (dataToken.rol == "CLIENT" && dataToken.sub == idUsuario)
-  ) {
     TeamsModel.find({ league: idLiga }, (err, team) => {
       if (err) {
         res.status(500).send({
@@ -378,7 +373,6 @@ function genPdf(req, res){
 
               if (team[team.length - 1]._id == dato._id) {
                 writePdf(responseData, req, res);
-                //res.status(200).send({ teams: responseData });
               }
             });
             //res.status(200).send({ equipos: team });
@@ -390,9 +384,6 @@ function genPdf(req, res){
         }
       }
     });
-  } else {
-    res.status(500).send({ message: "No puedes ver los equipos" });
-  }
 }
 
 function writePdf(datos, req, res){
@@ -452,16 +443,19 @@ function writePdf(datos, req, res){
                 });
               } else {
                 console.log(__dirname);
-                res.download(__dirname + "../../../pdf/teams/" + a._id + ".pdf");
+                res.status(200).send({ url: "https://torneos.easyprojects.tech/api/pdf/" + a._id});
               }
             }
           );
-        //}
       }else{
         res.status(404).send({message: "No se pudo encontrar la liga"});
       }
     }
   });
+}
+
+function getPdf(req, res){
+  res.download(__dirname + "../../../pdf/teams/" + req.params.idPdf + ".pdf");
 }
 
 module.exports = {
@@ -472,5 +466,6 @@ module.exports = {
   deleteTeam,
   getMaxJourneys,
   getTeamUser,
-  genPdf
+  genPdf,
+  getPdf
 };
