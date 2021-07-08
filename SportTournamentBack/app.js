@@ -7,10 +7,10 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 //Import
-var user_routes = require("./src/Routes/user.router");
-var league_routes = require("./src/Routes/league.route");
-var teams_routes = require("./src/Routes/teams.route");
-var score_routes = require("./src/Routes/score.route");
+var user_routes = require("./src/routes/user.router");
+var league_routes = require("./src/routes/league.route");
+var teams_routes = require("./src/routes/teams.route");
+var score_routes = require("./src/routes/score.route");
 
 //Middlewares
 app.use(bodyParser.urlencoded({extended: false}));

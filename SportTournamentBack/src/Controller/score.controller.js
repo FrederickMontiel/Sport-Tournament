@@ -1,7 +1,7 @@
-const ScoreModel = require("../Models/score.model");
-const TeamsModel = require("../Models/teams.model");
-const LeagueModel = require("../Models/league.model");
-const UserModel = require("../Models/user.model");
+const ScoreModel = require("../models/score.model");
+const TeamsModel = require("../models/teams.model");
+const LeagueModel = require("../models/league.model");
+const UserModel = require("../models/user.model");
 
 function getScore(req, res) {
   var idUsuario = req.params.idUsuario;

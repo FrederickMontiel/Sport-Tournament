@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const app = require("./app");
 const bcrypt = require("bcrypt-nodejs");
-const UserModel = require("./src/Models/user.model");
+const UserModel = require("./src/models/user.model");
 
 //connection
 mongoose.Promise = global.Promise;

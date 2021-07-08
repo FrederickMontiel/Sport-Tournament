@@ -1,7 +1,7 @@
 //Imports
-const teamsModel = require("../Models/teams.model");
-const scoreModel = require("../Models/score.model");
-const TeamsModel = require("../Models/teams.model");
+const teamsModel = require("../models/teams.model");
+const scoreModel = require("../models/score.model");
+const TeamsModel = require("../models/teams.model");
 const { model } = require("mongoose");
 
 //list teams

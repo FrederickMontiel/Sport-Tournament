@@ -2,9 +2,9 @@
 
 //Imports
 //const { schema } = require("../Models/user.model");
-var User = require("../Models/user.model");
+var User = require("../models/user.model");
 var bcrypt = require("bcrypt-nodejs");
-var jwt = require("../Service/jwt");
+var jwt = require("../service/jwt");
 
 //Register User (client)
 function saveUser(req, res) {

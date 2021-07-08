@@ -2,9 +2,9 @@
 /*const { response } = require('express');
 const leagueModel = require('../Models/league.model');*/
 //Imports
-var LeagueModel = require("../Models/league.model");
-var TeamModel = require("../Models/teams.model");
-var UserModel = require("../Models/user.model");
+var LeagueModel = require("../models/league.model");
+var TeamModel = require("../models/teams.model");
+var UserModel = require("../models/user.model");
 
 //List league
 function getLeagues(req, res) {
