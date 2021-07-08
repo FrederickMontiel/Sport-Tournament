@@ -152,7 +152,7 @@ function editLeague(req, res) {
   params.image ? (schema.image = params.image) : null;
   if (
     dataToken.rol == "ADMIN" ||
-    (dataToken.rol == "CLIENT" && createUser == dataToken.sub)
+    (dataToken.rol == "CLIENT" && idUsuario == dataToken.sub)
   ) {
     LeagueModel.findByIdAndUpdate(
       idLiga,
