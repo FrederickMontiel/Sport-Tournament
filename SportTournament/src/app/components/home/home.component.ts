@@ -6,6 +6,8 @@ import { LeaguesService } from 'src/app/services/leagues.service';
 import { ScoreService } from 'src/app/services/score.service';
 import { TeamsService } from 'src/app/services/teams.service';
 import { UserService } from 'src/app/services/user.service';
+import { Columns, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -24,6 +26,7 @@ export class HomeComponent implements OnInit {
   public teamModel: Team;
   public scoreModel: Score;
   public teamTable: [];
+  public temporal;
   constructor(
     public _leagueService: LeaguesService,
     public _userService: UserService,
@@ -109,7 +112,7 @@ export class HomeComponent implements OnInit {
     this._teamService.getTeams(this.token,this._userService.getIdentity()._id,idLeague).subscribe(
       response=>{
         this.teamTable = response.teams;
-        this.teamTable.sort(function(a, b){return a - b});
+        //this.teamTable.sort(function(a, b){return a - b});
       }
     )
   }
@@ -212,10 +215,9 @@ export class HomeComponent implements OnInit {
     this.select=[];
     this._teamService.getJourneys(this.token,this._userService.getIdentity()._id,idLeague).subscribe(
       response=>{
-        let temporal;;
         console.log(response.maximo)
-        temporal = response.maximo;
-        for(let i=0; i<temporal-1;i++){
+        this.temporal = response.maximo;
+        for(let i=0; i<this.temporal-1;i++){
           this.select.push(i+1);
         }
         console.log(this.select)
@@ -232,8 +234,7 @@ export class HomeComponent implements OnInit {
     )
   }
 
-  editTeam(){
-
+editTeam(){
     this._teamService.editTeam(this.token,this._userService.getIdentity()._id,this.teamModel.league,this.teamModel._id,this.teamModel).subscribe(
       response=>{
         console.log(response);
@@ -255,5 +256,8 @@ export class HomeComponent implements OnInit {
         });
       }
     )
+  }
+
+  generarPDF(){
   }
 }

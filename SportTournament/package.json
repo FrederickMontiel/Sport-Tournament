@@ -21,6 +21,8 @@
     "@angular/router": "~11.2.9",
     "@popperjs/core": "^2.9.2",
     "bootstrap": "^5.0.1",
+    "pdfmake": "^0.2.0",
+    "pdfmake-wrapper": "^2.1.2",
     "rxjs": "~6.6.0",
     "sweetalert2": "^11.0.18",
     "tslib": "^2.0.0",

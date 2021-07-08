@@ -12,6 +12,10 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CountComponent } from './components/count/count.component';
 import { NewLeagueComponent } from './components/new-league/new-league.component';
+import { PdfMakeWrapper } from 'pdfmake-wrapper';
+import * as pdfFonts from "pdfmake/build/vfs_fonts"; // fonts provided for pdfmake
+
+PdfMakeWrapper.setFonts(pdfFonts);
 
 
 @NgModule({
